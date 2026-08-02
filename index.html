@@ -1,351 +1,100 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Um Presente Distante</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
-    
     <style>
-        :root {
-            --text-gold: #d4af37;
-            --text-light: #e0e6ed;
-            --font-title: 'Cinzel', serif;
-        }
-
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-
-        body {
-            background-color: #050a14;
-            color: var(--text-light);
-            font-family: sans-serif;
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh; /* Altura exata considerando barras do celular */
-        }
-
-
-        .main-container {
-            position: relative;
+        body, html {
             width: 100%;
             height: 100%;
+            height: 100dvh;
+            background-color: #050a14;
+            overflow: hidden;
             display: flex;
             justify-content: center;
             align-items: center;
+            font-family: sans-serif;
         }
 
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 480px;
+            height: 100%;
+            max-height: 100vh;
+            max-height: 100dvh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
 
-        .bg-image {
+        .scene {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
-            z-index: 0;
-            opacity: 0.9;
-        }
-
-
-        /* Controle de Cenas Responsivo */
-        .scene {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; /* Distribui topo, meio e rodapé perfeitamente */
-            align-items: center;
-            padding: 7vh 20px 6vh 20px; /* Margem de segurança superior e inferior */
             opacity: 0;
             visibility: hidden;
-            transition: opacity 1.5s ease-in-out, visibility 1.5s;
-            z-index: 10;
+            transition: opacity 1s ease-in-out, visibility 1s ease-in-out;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-
 
         .scene.active {
             opacity: 1;
             visibility: visible;
-            z-index: 20;
+            z-index: 10;
         }
 
-
-        /* Textos */
-        .subtitle {
-            text-align: center;
-            color: var(--text-gold);
-            font-family: var(--font-title);
-            letter-spacing: 1px;
-            font-size: 1.1rem;
-            z-index: 30;
-        }
-
-
-        .instructions {
-            text-align: center;
-            color: var(--text-gold);
-            z-index: 30;
-        }
-
-
-        .step-num {
-            font-family: var(--font-title);
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-bottom: 3px;
-        }
-
-
-        .step-num::before, .step-num::after {
-            content: "✦";
-            font-size: 0.7rem;
-            color: rgba(212, 175, 55, 0.5);
-        }
-
-
-        .small-text {
-            margin-top: 6px;
-            font-size: 0.8rem;
-            color: rgba(224, 230, 237, 0.8);
-            font-style: italic;
-        }
-
-
-        /* --- CENA 1: Envelope Fechado --- */
-        .envelope-wrapper {
-            position: relative;
-            width: 85%;
-            max-width: 380px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: auto 0;
-        }
-
-
-        .envelope-img {
+        .scene img {
             width: 100%;
-            height: auto;
-            filter: drop-shadow(0 10px 20px rgba(0,0,0,0.8));
-            cursor: pointer;
-            transition: transform 0.2s ease-in-out;
-        }
-
-
-        .envelope-img:hover {
-            transform: scale(1.05);
-        }
-
-
-        .animated-pulse {
-            animation: pulse 2s infinite;
-        }
-
-
-        @keyframes pulse {
-            0% { filter: drop-shadow(0 0 0px rgba(255, 215, 0, 0.2)); }
-            50% { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.6)); }
-            100% { filter: drop-shadow(0 0 0px rgba(255, 215, 0, 0.2)); }
-        }
-
-
-        /* --- CENA 2: Envelope Aberto e Carta --- */
-        .envelope-open-wrapper {
-            position: relative;
-            width: 85%;
-            max-width: 380px;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            margin: auto 0;
-        }
-
-
-        .envelope-open-bg {
-            width: 100%;
-            height: auto;
-            z-index: 1;
-        }
-
-
-        .letter-img {
-            position: absolute;
-            bottom: 20%;
-            left: 50%;
-            width: 72%;
-            transform: translateX(-50%) translateY(20%);
-            z-index: 2;
-            opacity: 0;
-            transition: transform 2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1s ease-in;
-        }
-
-
-        .letter-img.slide-up {
-            transform: translateX(-50%) translateY(-15%);
-            opacity: 1;
-            cursor: pointer;
-        }
-        
-        .letter-img.slide-up:hover {
-            filter: brightness(1.1);
-        }
-
-
-        .envelope-front-flap {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 48%; 
-            overflow: hidden;
-            z-index: 3;
-            pointer-events: none;
-        }
-
-
-        .envelope-front-flap img {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: auto;
-        }
-
-
-        /* --- CENA 3: Cartão Flor --- */
-        .card-wrapper {
-            position: relative;
-            width: 80%;
-            max-width: 340px;
-            margin: auto 0;
-            filter: drop-shadow(0 0 40px rgba(30, 144, 255, 0.3));
-        }
-
-
-        .final-card-img {
-            width: 100%;
-            height: auto;
-            border-radius: 15px;
+            height: 100%;
+            object-fit: cover; /* Preenche perfeitamente a tela mantendo proporção */
+            display: block;
         }
     </style>
 </head>
 <body>
 
-
-    <div class="main-container">
-        
-        <!-- Fundo Geral -->
-        <img src="lotusbg.jpg" class="bg-image" alt="Céu Noturno">
-
-
-        <!-- CENA 1: O Envelope Fechado -->
-        <div id="scene-1" class="scene active">
-            <div class="subtitle">UM PRESENTE DE<br>UM AMIGO DISTANTE...</div>
-            
-            <div class="envelope-wrapper">
-                <img src="lotusclosedletter.png" id="envelope-btn" class="envelope-img animated-pulse" alt="Envelope Fechado">
-            </div>
-            
-            <div class="instructions">
-                <span class="step-num">01</span>
-                <p>Clique no envelope</p>
-            </div>
+    <div class="container">
+        <!-- CENA 1 -->
+        <div id="scene-1" class="scene active" onclick="nextScene(2)">
+            <img src="lotus01.jpg" alt="Envelope Fechado">
         </div>
 
-
-        <!-- CENA 2: A Carta se Revela -->
-        <div id="scene-2" class="scene">
-            <div class="subtitle">ALGO ESPECIAL FOI DEIXADO PARA VOCÊ.</div>
-            
-            <div class="envelope-open-wrapper">
-                <img src="lotusopenletter.jpg" class="envelope-open-bg" alt="Envelope Aberto">
-                <img src="lotuscardtext.png" id="letter-content" class="letter-img" alt="Mensagem da Carta">
-                <div class="envelope-front-flap">
-                    <img src="lotusopenletter.jpg" alt="Frente do Envelope">
-                </div>
-            </div>
-            
-            <div class="instructions">
-                <span class="step-num">02</span>
-                <p>Clique na carta para abri-la</p>
-                <p class="small-text">Alguns presentes não precisam de proximidade,<br>apenas de intenção.</p>
-            </div>
+        <!-- CENA 2 -->
+        <div id="scene-2" class="scene" onclick="nextScene(3)">
+            <img src="lotus02.jpg" alt="Carta Revelada">
         </div>
 
-
-        <!-- CENA 3: A Flor -->
+        <!-- CENA 3 -->
         <div id="scene-3" class="scene">
-            <div class="subtitle" style="opacity: 0;">-</div> <!-- Espaçador para manter o alinhamento -->
-            
-            <div class="card-wrapper">
-                <img src="lotuscard.jpg" class="final-card-img" alt="Cartão Flor de Lótus">
-            </div>
-            
-            <div class="instructions">
-                <span class="step-num">03</span>
-                <p>Um presente para você</p>
-            </div>
+            <img src="lotus03.jpg" alt="Flor de Lótus">
         </div>
-
-
     </div>
 
-
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const scene1 = document.getElementById('scene-1');
-            const scene2 = document.getElementById('scene-2');
-            const scene3 = document.getElementById('scene-3');
-            
-            const envelopeBtn = document.getElementById('envelope-btn');
-            const letterContent = document.getElementById('letter-content');
-
-
-            let isAnimating = false;
-
-
-            envelopeBtn.addEventListener('click', () => {
-                if (isAnimating) return;
-                isAnimating = true;
-
-
-                envelopeBtn.classList.remove('animated-pulse');
-
-
-                setTimeout(() => {
-                    scene1.classList.remove('active');
-                    scene2.classList.add('active');
-
-
-                    setTimeout(() => {
-                        letterContent.classList.add('slide-up');
-                        isAnimating = false;
-                    }, 1000); 
-                    
-                }, 300); 
-            });
-
-
-            letterContent.addEventListener('click', () => {
-                if (isAnimating) return;
-                isAnimating = true;
-
-
-                scene2.classList.remove('active');
-                scene3.classList.add('active');
-                isAnimating = false;
-            });
-        });
+        function nextScene(sceneNumber) {
+            const currentActive = document.querySelector('.scene.active');
+            if (currentActive) {
+                currentActive.classList.remove('active');
+            }
+            const next = document.getElementById('scene-' + sceneNumber);
+            if (next) {
+                next.classList.add('active');
+            }
+        }
     </script>
 </body>
 </html>
